@@ -1,0 +1,51 @@
+Roadmap :
+- Fork le projet
+- Optionnel
+  - Migrer le projet sous Symfony 3.4
+  - Installer le projet en local, nécessite d'avoir PHP7.2
+- Installer Blackfire
+- Profiler les pages du projet avec Blackfire (en environnement de production => app.php)
+  - Temps d'éxecution
+  - Consommation mémoire
+- Installer des outils d'analyse statiques pour le Back :
+  - PHP Stan et ses extensions (symfony et doctrine) - Niveau 9
+  - PHP CS Fixer
+  - PHP MD
+  - PHP CPD
+  - Composer unused
+  - Commandes déjà incluses dans Symfony et Composer
+    - composer valid
+    - symfony twig:lint templates/
+    - symfony yaml:lint config/
+    - symfony container:lint
+    - symfony doctrine:schema:valid --skip-sync
+  - Exemple de projet : https://github.com/TBoileau/twitch-defi
+  - Un site listant tous les outils : https://github.com/exakat/php-static-analysis-tools
+- Utiliser des outils d'analyse du Front :
+  - TwigCS
+  - Stylelint
+  - ESLint
+  - Google Light House
+  - AChecker
+  - Wave
+  - Validateurs CSS et HTML W3C
+- Lancer les analyses
+- Analyser le code du back-end :
+  - Principes SOLID et bonnes pratiques
+  - Versions de PHP/Symfony - Roadmap
+- Analyser le code et l'interface du Front-end
+  - Versions Jquery/Bootstrap
+- Implémenter les tests fonctionnels & unitaires
+- Commencer la rédaction de l'audit
+- Migration du projet vers Symfony 5.4/6.1 et PHP 7.4/8.0/8.1
+- Corriger, modifier et optimiser le code
+- Optimisation de la configuration de PHP et Composer
+- Profiler toutes les pages du projet (en environnement de production) avec Blackfire
+- Finir la rédaction de l'audit :
+  - Expliquer les corrections, modifications et optimisations apportées
+- Comparaison des performances avant/après
+- Rédaction du README.md
+- Rédaction du CONTRIBUTING.md
+- Rédaction de la documentation technique sur la sécurité
+  - Authentification
+  - Autorisation
