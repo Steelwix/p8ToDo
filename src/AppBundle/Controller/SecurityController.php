@@ -27,7 +27,7 @@ class SecurityController extends Controller
     /**
      * @Route("/login_check", name="login_check")
      */
-    public function loginCheck()
+    public function loginCheck(Request $request)
     {
         // This code is never executed.
     }
