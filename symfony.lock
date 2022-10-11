@@ -256,5 +256,8 @@
             "version": "3.3",
             "ref": "dae9b39fd6717970be7601101ce5aa960bf53d9a"
         }
+    },
+    "twig/extra-bundle": {
+        "version": "v3.4.0"
     }
 }
