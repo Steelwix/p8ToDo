@@ -1,10 +1,14 @@
 app:
     resource: "../src/Controller/"
     type:     annotation
+homepage:
+    path: /
+    defaults:
+        _controller: App\Controller\DefaultController::indexAction
 login:
     path:     /login
-    defaults: { _controller: AppBundle:Security:login }
+    defaults: { _controller: App\Controller\SecurityController::loginAction }
 
 user_registration:
     path:     /users/create
-    defaults: { _controller: AppBundle:User:user_create }   
+    defaults: { _controller: App\Controller\UserController:createAction }   
