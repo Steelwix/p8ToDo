@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    cache_type: file_system
+    cache_type: array
     container.autowiring: true 
 
 services:
