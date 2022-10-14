@@ -31,8 +31,6 @@ services:
     # please note that last definitions always *replace* previous ones
     Knp\Bundle\MarkdownBundle\MarkdownParserInterface: '@markdown.parser'
     Doctrine\ORM\EntityManager: '@doctrine.orm.default_entity_manager'
-    App\Doctrine\HashPasswordListener:
-        tags: [doctrine.event_subscriber]
     App\Service\MessageManager:
         arguments:
             - ['You can do it!', 'Dude, sweet!', 'Woot!']
