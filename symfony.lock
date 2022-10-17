@@ -164,12 +164,12 @@
         ]
     },
     "symfony/phpunit-bridge": {
-        "version": "6.1",
+        "version": "4.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
-            "version": "5.3",
-            "ref": "97cb3dc7b0f39c7cfc4b7553504c9d7b7795de96"
+            "version": "4.3",
+            "ref": "0e1b186400de9d4ab83363138b4eb0072c99b2ab"
         },
         "files": [
             ".env.test",
@@ -203,6 +203,15 @@
         "files": [
             "config/packages/security.yaml"
         ]
+    },
+    "symfony/sendgrid-mailer": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.4",
+            "ref": "b46e4f8f1adb2864f0aa9c0ff57aea3324a07199"
+        }
     },
     "symfony/translation": {
         "version": "4.4",
