@@ -13,7 +13,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils): Response
+    public function loginAction(AuthenticationUtils $authenticationUtils): Response
     {
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -28,7 +28,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login_check", name="login_check")
      */
-    public function loginCheck(Request $request)
+    public function loginCheck(): \Symfony\Component\HttpFoundation\Response
     {
         // This code is never executed.
         return $this->redirectToRoute('homepage');
@@ -37,7 +37,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="logout")
      */
-    public function logoutCheck()
+    public function logoutCheck(): \Symfony\Component\HttpFoundation\Response
     {
         // This code is never executed.
     }
