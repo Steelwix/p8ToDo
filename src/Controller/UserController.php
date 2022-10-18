@@ -5,18 +5,18 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends AbstractController
 {
     /**
      * @Route("/users", name="user_list")
      */
-    public function listAction(UserRepository $userRepository): \Symfony\Component\HttpFoundation\Response
+    public function listAction(UserRepository $userRepository): Response
     {
         return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
@@ -24,16 +24,15 @@ class UserController extends AbstractController
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoderInterface): \Symfony\Component\HttpFoundation\Response
+    public function createAction(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
     {
-
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoderInterface->encodePassword($user, $user->getPassword());
+            $password = $userPasswordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -50,7 +49,7 @@ class UserController extends AbstractController
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request): \Symfony\Component\HttpFoundation\Response
+    public function editAction(User $user, Request $request): Response
     {
         $form = $this->createForm(UserType::class, $user);
 
