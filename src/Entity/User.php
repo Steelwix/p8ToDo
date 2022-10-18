@@ -48,6 +48,10 @@ class User implements UserInterface
     {
         return $this->username;
     }
+    public function getUserIdentifier()
+    {
+        return $this->username;
+    }
 
     public function setUsername($username)
     {
