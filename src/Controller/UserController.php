@@ -16,7 +16,7 @@ class UserController extends AbstractController
     /**
      * @Route("/users", name="user_list")
      */
-    public function listAction(UserRepository $userRepository)
+    public function listAction(UserRepository $userRepository): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
@@ -24,7 +24,7 @@ class UserController extends AbstractController
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoderInterface)
+    public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoderInterface): \Symfony\Component\HttpFoundation\Response
     {
 
         $user = new User();
@@ -50,14 +50,14 @@ class UserController extends AbstractController
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request)
+    public function editAction(User $user, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+            $password = $this->userPasswordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $this->getDoctrine()->getManager()->flush();
