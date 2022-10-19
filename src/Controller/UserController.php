@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Form\UserType;
-use App\Repository\UserRepository;
+use App\Entity\users;
+use App\Form\UsersType;
+use App\Repository\UsersRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -14,25 +15,24 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends AbstractController
 {
     #[Route(path: '/users', name: 'user_list')]
-    public function listAction(UserRepository $userRepository): Response
+    public function listAction(UsersRepository $usersRepository): Response
     {
-        return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
+        return $this->render('user/list.html.twig', ['users' => $usersRepository->findAll()]);
     }
 
     #[Route(path: '/users/create', name: 'user_create')]
-    public function createAction(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function createAction(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManagerInterface): Response
     {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $user = new Users;
+        $form = $this->createForm(UsersType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $userPasswordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $entityManagerInterface->persist($user);
+            $entityManagerInterface->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -43,17 +43,17 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
-    public function editAction(User $user, Request $request): Response
+    public function editAction(Users $user, Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UsersType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $this->userPasswordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-
-            $this->getDoctrine()->getManager()->flush();
+            $entityManagerInterface->persist($user);
+            $entityManagerInterface->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 

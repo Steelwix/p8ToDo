@@ -2,30 +2,32 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\TaskRepository;
 
-#[ORM\Table]
+#[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private $id;
+    private ?int $id  = null;
 
     #[ORM\Column(type: 'datetime')]
     private $createdAt;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column]
     #[Assert\NotBlank(message: 'Vous devez saisir un titre.')]
-    private $title;
+    private ?string $title = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column]
     #[Assert\NotBlank(message: 'Vous devez saisir du contenu.')]
-    private $content;
+    private ?string $content = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $isDone = false;
+    private ?bool $isDone = false;
 
     public function __construct()
     {
