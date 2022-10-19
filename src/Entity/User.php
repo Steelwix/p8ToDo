@@ -30,7 +30,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private $password;
+    private  ?string $password = null;
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
@@ -38,6 +38,10 @@ class User implements UserInterface
      * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
      */
     private $email;
+    /**
+     * @ORM\Column(type="json")
+     */
+    private array $roles = [];
 
     public function getId()
     {
@@ -86,7 +90,11 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        return $this->roles;
+    }
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
     }
 
     public function eraseCredentials()
