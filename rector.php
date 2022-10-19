@@ -6,6 +6,7 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\SymfonyLevelSetList;
+use Rector\Symfony\Set\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
