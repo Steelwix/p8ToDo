@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\users;
+use App\Entity\Users;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
