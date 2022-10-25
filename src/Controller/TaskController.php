@@ -17,7 +17,11 @@ class TaskController extends AbstractController
     public function listAction(TaskRepository $taskRepository): Response
     {
         $users = $this->getUser();
-        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findAll()]);
+        $usersRole = $users->getRoles();
+        if ($usersRole == ["ROLE_USER"]) {
+            return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findByUsers($users)]);
+        }
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findByUsers($users), 'anoTasks' => $taskRepository->findByUsers(null)]);
     }
 
     #[Route(path: '/tasks/create', name: 'task_create')]
