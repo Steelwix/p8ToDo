@@ -7,6 +7,9 @@
 	<a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
 	<div class="row">
 		{% for task in tasks %}
+			{% if is_granted("CanSeeAnonymousTasks", task) %}
+				KIKOU
+			{% endif %}
 			<div class="col-sm-4 col-lg-4 col-md-4">
 				<div class="thumbnail">
 					<div class="caption">
