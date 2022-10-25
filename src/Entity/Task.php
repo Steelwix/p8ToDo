@@ -29,6 +29,9 @@ class Task
     #[ORM\Column(type: 'boolean')]
     private ?bool $isDone = false;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Users $users = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -77,5 +80,17 @@ class Task
     public function toggle($flag)
     {
         $this->isDone = $flag;
+    }
+
+    public function getUsers(): ?Users
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?Users $users): self
+    {
+        $this->users = $users;
+
+        return $this;
     }
 }
