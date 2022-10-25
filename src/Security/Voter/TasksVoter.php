@@ -10,14 +10,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TasksVoter extends Voter
 {
-    public const ANO_TASK = 'POST_EDIT';
-    public const USER_TASK = 'POST_VIEW';
+    public const ANO_TASK = 'ANO_TASK';
 
     protected function supports(string $attribute, $task): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::ANO_TASK, self::USER_TASK])
+        return in_array($attribute, [self::ANO_TASK])
             && $task instanceof Task;
     }
 
@@ -35,10 +34,6 @@ class TasksVoter extends Voter
                 // logic to determine if the user can EDIT
                 // return true or false
                 break;
-            case self::USER_TASK:
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
         }
 
         return false;
@@ -46,10 +41,7 @@ class TasksVoter extends Voter
 
     private function CanSeeAnonymousTasks(Task $task, Users $users)
     {
-        return $users === $task->getUsers();
-    }
-    private function CanSeeOwnTasks(Task $task, Users $users)
-    {
-        return $users === $task->getUsers();
+        $roles = $users->getRoles();
+        return $roles === ["ROLE_ADMIN"];
     }
 }

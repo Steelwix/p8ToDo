@@ -4,14 +4,36 @@
 	{% if error %}
 		<div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 	{% endif %}
+	<section class="login-page">
+		<div class="row">
+			<div class="col-12">
+				<form method="post">
+					{% if app.user %}
+						<div class="mb-3">
+							Vous êtes connecté.e en tant que
+							{{ app.user.userIdentifier }},
+							<a href="">Se déconnecter</a>
+						</div>
+					{% endif %}
 
-	<form action="{{ path('login_check') }}" method="post">
-		<label for="username">Nom d'utilisateur :</label>
-		<input type="text" id="username" name="_username" value="{{ last_username }}"/>
+					<br><br><br><h3 class="text-center">Se connecter</h3>
+				</div>
+				<div class="card col-md-10 col-8 mx-auto text-center login-card"><br>
+					<label for="Username">Pseudonyme</label><br>
+					<input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus><br>
+					<label for="Password">Mot de passe</label><br>
+					<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required><br>
 
-		<label for="password">Mot de passe :</label>
-		<input type="password" id="password" name="_password"/>
 
-		<button class="btn btn-success" type="submit">Se connecter</button>
-	</form>
+					<button class="btn btn-lg btn-primary" type="submit">
+						Connexion
+					</button><br><br>
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+					<a class="" href="">Mot de passe oublié?</a><br><br>
+					<a class="d-lg-none" href="">S'inscrire</a><br><br>
+				</form>
+
+			</div>
+		</div>
+	</section>
 {% endblock %}
