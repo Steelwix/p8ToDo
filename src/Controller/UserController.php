@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Users;
+use App\Form\AdminUsersType;
 use App\Form\UsersType;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,15 +24,21 @@ class UserController extends AbstractController
     #[Route(path: '/users/create', name: 'user_create')]
     public function createAction(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManagerInterface): Response
     {
-        $user = new Users;
-        $form = $this->createForm(UsersType::class, $user);
-
+        $users = new Users;
+        $user = $this->getUser();
+        $userRole = $user->getRoles();
+        if ($userRole = array(["ROLE_ADMIN"], "ROLE_USER")) {
+            $form = $this->createForm(AdminUsersType::class, $users);
+        } else {
+            $form = $this->createForm(UsersType::class, $users);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $userPasswordHasher->hashPassword($user, $user->getPassword());
+            $password = $userPasswordHasher->hashPassword($users, $users->getPassword());
             $user->setPassword($password);
-            $entityManagerInterface->persist($user);
+            $user->setRoles($form->get('roles')->getData());
+            $entityManagerInterface->persist($users);
             $entityManagerInterface->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
@@ -43,14 +50,14 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
-    public function editAction(Users $user, Request $request, EntityManagerInterface $entityManagerInterface): Response
+    public function editAction(Users $user, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManagerInterface): Response
     {
         $form = $this->createForm(UsersType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->userPasswordEncoder->encodePassword($user, $user->getPassword());
+            $password = $userPasswordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
             $entityManagerInterface->persist($user);
             $entityManagerInterface->flush();
