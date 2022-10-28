@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class UsersType extends AbstractType
+class AdminUsersType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,6 +23,17 @@ class UsersType extends AbstractType
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
             ])
-            ->add('email', EmailType::class, ['label' => 'Adresse email']);
+            ->add('email', EmailType::class, ['label' => 'Adresse email'])
+            ->add(
+                'roles',
+                ChoiceType::class,
+                [
+                    'label' => "",
+                    'choices' => ['Définir comme administrateur' => '["ROLE_ADMIN"]'],
+                    'expanded' => true,
+                    'multiple' => true
+
+                ]
+            );
     }
 }

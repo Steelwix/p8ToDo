@@ -19,7 +19,7 @@ class TaskController extends AbstractController
         $users = $this->getUser();
         $usersRole = $users->getRoles();
         if ($usersRole == ["ROLE_USER"]) {
-            return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findByUsers($users)]);
+            return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findByUsers($users), 'anoTasks' => null]);
         }
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findByUsers($users), 'anoTasks' => $taskRepository->findByUsers(null)]);
     }
@@ -29,11 +29,11 @@ class TaskController extends AbstractController
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
-
+        $user = $this->getUser();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $task->setUsers($user);
             $entityManagerInterface->persist($task);
             $entityManagerInterface->flush();
 
