@@ -18,6 +18,7 @@ security:
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\UserAuthentificatorAuthenticator
+            access_denied_url: /
             logout:
                 path: logout
     role_hierarchy:

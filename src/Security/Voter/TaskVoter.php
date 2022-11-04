@@ -2,25 +2,24 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Task;
-use App\Entity\Users;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TasksVoter extends Voter
+class TaskVoter extends Voter
 {
-    public const ANO_TASK = 'anoTask';
+    public const EDIT = 'POST_EDIT';
+    public const VIEW = 'POST_VIEW';
 
-    protected function supports(string $attribute, $task): bool
+    protected function supports(string $attribute, $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::ANO_TASK])
-            && $task instanceof Task;
+        return in_array($attribute, [self::EDIT, self::VIEW])
+            && $subject instanceof \App\Entity\Task;
     }
 
-    protected function voteOnAttribute(string $attribute, $task, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
@@ -30,18 +29,16 @@ class TasksVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case self::ANO_TASK:
+            case self::EDIT:
                 // logic to determine if the user can EDIT
-                return $this->CanSeeAnonymousTasks($task, $user);
+                // return true or false
+                break;
+            case self::VIEW:
+                // logic to determine if the user can VIEW
+                // return true or false
                 break;
         }
 
         return false;
-    }
-
-    private function CanSeeAnonymousTasks(Task $task, Users $user)
-    {
-        $roles = $user->getRoles();
-        return $roles === ["ROLE_ADMIN"];
     }
 }
