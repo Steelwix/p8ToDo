@@ -6,7 +6,8 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class TaskTest
 {
-    const FOOD_PRODUCT = 'Titre';
+    const TITLE = 'Titre';
+    const CONTENT = 'Contenu';
     public function __construct($title, $content)
     {
         $this->title = $title;
@@ -15,7 +16,7 @@ class TaskTest
     public function computeTask(): float | Exception
     {
 
-        if (self::FOOD_PRODUCT == $this->title) {
+        if (self::TITLE == $this->title && self::CONTENT == $this->content) {
             return 1;
         }
     }
