@@ -28,29 +28,42 @@ class UserController extends AbstractController
     {
         $users = new Users;
         $user = $this->getUser();
-        $userRole = $user->getRoles();
-        if ($userRole = array(["ROLE_ADMIN"], "ROLE_USER")) {
-            $form = $this->createForm(AdminUsersType::class, $users);
-        } else {
-            $form = $this->createForm(UsersType::class, $users);
+        $testUser = $user;
+        switch ($testUser) {
+            case null:
+                $form = $this->createForm(UsersType::class, $users);
+                break;
+            case $testUser === $user:
+                $userRole = $user->getRoles();
+                if ($userRole == array("0" => "ROLE_ADMIN", "1" => "ROLE_USER")) {
+                    $form = $this->createForm(AdminUsersType::class, $users);
+                } else {
+                    $form = $this->createForm(UsersType::class, $users);
+                }
+                break;
         }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $userPasswordHasher->hashPassword($users, $users->getPassword());
-            $user->setPassword($password);
-            $user->setRoles($form->get('roles')->getData());
+            $password = $userPasswordHasher->hashPassword($users, $form->get('password')->getData());
+            $users->setPassword($password);
+            if ($user) {
+                $userRole = $user->getRoles();
+
+                if ($userRole == array("0" => "ROLE_ADMIN", "1" => "ROLE_USER")) {
+                    $users->setRoles($form->get('roles')->getData());
+                }
+            }
             $entityManagerInterface->persist($users);
             $entityManagerInterface->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
-
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
     public function editAction(Users $users, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManagerInterface): Response
     {

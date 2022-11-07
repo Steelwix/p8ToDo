@@ -2,22 +2,25 @@
 
 namespace App\Entity;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-class TaskTest
+class TaskTest extends WebTestCase
 {
-    const TITLE = 'Titre';
-    const CONTENT = 'Contenu';
-    public function __construct($title, $content)
-    {
-        $this->title = $title;
-        $this->content = $content;
-    }
-    public function computeTask(): float | Exception
-    {
 
-        if (self::TITLE == $this->title && self::CONTENT == $this->content) {
-            return 1;
-        }
+    public function testCreateAction()
+    {
+        $dateImmutable = \DateTime::createFromFormat('Y-m-d H:i:s', strtotime('now'));
+        $users = new Users();
+        $task = new Task();
+        $task->setTitle("Title");
+        $task->setContent("Content");
+        $task->setUsers($users);
+        $task->setCreatedAt($dateImmutable);
+
+        $this->assertEquals("Title", $task->getTitle());
+        $this->assertEquals("Content", $task->getContent());
+        $this->assertEquals($users, $task->getUsers());
+        $this->assertEquals($dateImmutable, $task->getCreatedAt());
     }
 }
