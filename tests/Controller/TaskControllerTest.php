@@ -41,7 +41,23 @@ class TaskControllerTest extends WebTestCase
         $form['task[content]'] = 'Contenu de test';
         $this->client->submit($form);
         $this->client->followRedirect();
-
         $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+    public function testToggleTaskAction()
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_create'));
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['task[title]'] = 'Toggle Test';
+        $form['task[content]'] = 'Contenu de test';
+        $this->client->submit($form);
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_list'));
+        $form = $crawler->selectButton('Marquer comme faite')->form();
+        $this->client->submit($form);
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('div.alert.alert-success', 'a bien été marquée comme faite');
     }
 }

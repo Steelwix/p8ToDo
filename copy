@@ -1,0 +1,19 @@
+    public function testEditAction()
+    {
+    $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_create'));
+    $form = $crawler->selectButton('Ajouter')->form();
+    $form['task[title]'] = 'Titre de test';
+    $form['task[content]'] = 'Contenu de test';
+    $this->client->submit($form);
+    $this->client->followRedirect();
+    $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
+    $linkCrawler = $crawler->filter('.task-edit-button');
+    $link = $crawler->selectLink('Titre de test')->link();
+    $crawler = $this->client->click($link);
+    $this->client->followRedirect();
+    $form['task[title]'] = 'Titre de test2';
+    $form['task[content]'] = 'Contenu de test2';
+    $this->client->submit($form);
+    $this->client->followRedirect();
+    $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
+    }
