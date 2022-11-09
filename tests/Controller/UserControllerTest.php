@@ -51,4 +51,17 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+    public function testEditAction()
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('user_edit', array('id' => 3)));
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['admin_users[username]'] = 'NewAlpha';
+        $form['admin_users[password][first]'] = 'motdepasseuser';
+        $form['admin_users[password][second]'] = 'motdepasseuser';
+        $form['admin_users[email]'] = 'newalpha@gmail.com';
+        $form['admin_users[roles]'] = array("0" => '["ROLE_ADMIN"]');
+        $this->client->submit($form);
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('div.alert.alert-success', 'L\'utilisateur a bien été modifié');
+    }
 }

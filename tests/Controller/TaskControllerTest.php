@@ -60,4 +60,30 @@ class TaskControllerTest extends WebTestCase
         $this->client->followRedirect();
         $this->assertSelectorTextContains('div.alert.alert-success', 'a bien été marquée comme faite');
     }
+    public function testEditAction()
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_edit', array('id' => 130)));
+        $form = $crawler->selectButton('Mettre à jour')->form();
+        $form['task[title]'] = 'Modifier cette tache test';
+        $form['task[content]'] = 'Contenu de test';
+        $this->client->submit($form);
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
+    }
+    public function deleteTaskAction()
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_create'));
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['task[title]'] = 'Suppression Test';
+        $form['task[content]'] = 'Contenu de test';
+        $this->client->submit($form);
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_list'));
+        $form = $crawler->selectButton('Supprimer')->form();
+        $this->client->submit($form);
+        $this->assertSelectorTextContains('div.alert.alert-success', 'La tâche a bien été supprimée.');
+        $this->client->followRedirect();
+    }
 }
