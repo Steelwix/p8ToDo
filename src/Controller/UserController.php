@@ -51,7 +51,9 @@ class UserController extends AbstractController
                 $userRole = $user->getRoles();
 
                 if ($userRole == array("0" => "ROLE_ADMIN", "1" => "ROLE_USER")) {
-                    $users->setRoles($form->get('roles')->getData());
+                    if ($form->get('roles')->getData() !== null) {
+                        $users->setRoles(["ROLE_ADMIN"]);
+                    }
                 }
             }
             $entityManagerInterface->persist($users);
@@ -69,7 +71,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $userRole = $user->getRoles();
-        if ($userRole = array(["ROLE_ADMIN"], "ROLE_USER")) {
+        if ($userRole == array("0" => "ROLE_ADMIN", "1" => "ROLE_USER")) {
             $form = $this->createForm(AdminUsersType::class, $users);
         } else {
             $form = $this->createForm(UsersType::class, $users);
@@ -87,6 +89,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+        return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'users' => $users]);
     }
 }
