@@ -55,7 +55,7 @@
 							{% endif %}
 						</h4>
 						<h4>
-							<a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a>
+							<a class="task-edit-button" href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a>
 						</h4>
 						<p>{{ task.content }}</p>
 					</div>
