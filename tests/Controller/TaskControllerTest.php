@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Task;
 use App\Entity\Users;
 use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -62,7 +63,19 @@ class TaskControllerTest extends WebTestCase
     }
     public function testEditAction()
     {
-        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_edit', array('id' => 130)));
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_create'));
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['task[title]'] = 'Edit test';
+        $form['task[content]'] = 'Edit test';
+        $this->client->submit($form);
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_list'));
+        $this->taskRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(Task::class);
+        $task = $this->taskRepository->findOneByTitle('Edit test');
+        $taskId = $task->getId();
+        $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('task_edit', array('id' => $taskId)));
         $form = $crawler->selectButton('Mettre à jour')->form();
         $form['task[title]'] = 'Modifier cette tache test';
         $form['task[content]'] = 'Contenu de test';
@@ -85,5 +98,6 @@ class TaskControllerTest extends WebTestCase
         $this->client->submit($form);
         $this->assertSelectorTextContains('div.alert.alert-success', 'La tâche a bien été supprimée.');
         $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }

@@ -4,23 +4,26 @@ namespace App\Tests\Security;
 
 use App\Entity\Users;
 use App\Repository\UsersRepository;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 class UserAuthentificatorAuthenticatorTest extends WebTestCase
 {
+
+    private MockObject | Request | null $request;
     public function setUp(): void
 
     {
         $this->client = static::createClient();
-        $this->userRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(Users::class);
-        $this->user = $this->userRepository->findOneByEmail('mhunmael@hotmail.com');
-        $this->urlGenerator = $this->client->getContainer()->get('router.default');
-        $this->client->loginUser($this->user);
+        $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
     }
     public function testAuthenticate(): void
     {
-        $crawler = $this->client->request(Request::METHOD_GET, 'username');
     }
 }
