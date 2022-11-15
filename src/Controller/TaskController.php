@@ -48,6 +48,14 @@ class TaskController extends AbstractController
     #[Route(path: '/tasks/{id}/edit', name: 'task_edit')]
     public function editAction(Task $task, Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
+        $user = $this->getUser();
+        $usersRole = $user->getRoles();
+        if ($usersRole == ["ROLE_USER"]) {
+            $usersTask = $task->getUsers();
+            if ($usersTask !== $this->getUser()) {
+                return $this->redirectToRoute('task_list');
+            }
+        }
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -70,6 +78,14 @@ class TaskController extends AbstractController
     #[Route(path: '/tasks/{id}/toggle', name: 'task_toggle')]
     public function toggleTaskAction(Task $task,  EntityManagerInterface $entityManagerInterface): Response
     {
+        $user = $this->getUser();
+        $usersRole = $user->getRoles();
+        if ($usersRole == ["ROLE_USER"]) {
+            $usersTask = $task->getUsers();
+            if ($usersTask !== $this->getUser()) {
+                return $this->redirectToRoute('task_list');
+            }
+        }
         $task->toggle(!$task->isDone());
         $entityManagerInterface->persist($task);
         $entityManagerInterface->flush();
@@ -82,7 +98,14 @@ class TaskController extends AbstractController
     #[Route(path: '/tasks/{id}/delete', name: 'task_delete')]
     public function deleteTaskAction(Task $task, EntityManagerInterface $entityManagerInterface): Response
     {
-
+        $user = $this->getUser();
+        $usersRole = $user->getRoles();
+        if ($usersRole == ["ROLE_USER"]) {
+            $usersTask = $task->getUsers();
+            if ($usersTask !== $this->getUser()) {
+                return $this->redirectToRoute('task_list');
+            }
+        }
         $entityManagerInterface->remove($task);
         $entityManagerInterface->flush();
 

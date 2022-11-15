@@ -25,6 +25,7 @@ class UserTest extends WebTestCase
         $users->setUsername("newuser");
         $users->setPassword($password);
         $users->addTask($task);
+        $usersTasks = $users->getTasks();
 
         $this->assertEquals("user@email.com", $users->getEmail());
         $this->assertEquals(["ROLE_USER"], $users->getRoles());
@@ -32,5 +33,10 @@ class UserTest extends WebTestCase
         $this->assertEquals("motdepasse", $users->getPassword());
         $this->assertEquals(null, $users->getSalt());
         $this->assertEquals($users->getUsername(), $users->getUserIdentifier());
+        $this->assertEquals($usersTasks, $users->getTasks());
+
+        $users->removeTask($task);
+
+        $this->assertEquals($usersTasks, $users->getTasks());
     }
 }
